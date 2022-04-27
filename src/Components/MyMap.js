@@ -55,7 +55,7 @@ const getUniqueFilterItems = (locations) => {
   const uniqueFilters = []
 
   locations.map(location => {
-    if(!uniqueFilters.includes(location.type)) {
+    if (!uniqueFilters.includes(location.type)) {
       uniqueFilters.push(location.type)
     }
   })
@@ -71,7 +71,7 @@ const MyMap = () => {
   const updateFilter = (e) => {
     console.log('e', e.currentTarget.name)
     console.log('checked', e.currentTarget.checked)
-    
+
     if (!e.currentTarget.checked) {
       const locationsCopy = [...activeLocations]
       const newLocations = locationsCopy.filter(location => location.type !== e.currentTarget.name)
@@ -81,12 +81,12 @@ const MyMap = () => {
       const newLocations = locationsCopy.filter(location => location.type === e.currentTarget.name)
       setActiveLocations([...activeLocations, ...newLocations])
     }
- 
+
   }
 
   useEffect(() => {
     setFilterItems(getUniqueFilterItems(locations))
-  },[locations])
+  }, [locations])
 
   return (
     <>
@@ -102,27 +102,24 @@ const MyMap = () => {
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
         />
+        
+        {activeLocations.map((location) => (
+          <Marker
+            key={location.key}
+            position={location.position}
+            icon={GetIcon(location.size, location.iconColor)}
+          >
+            <Popup>{location.name}</Popup>
+          </Marker>
+        ))}
 
-        <LayersControl collapsed={false} position="bottomright">
-          <LayersControl.Overlay checked name="Colegios">
-            {activeLocations.map((location) => (
-              <Marker
-                key={location.key}
-                position={location.position}
-                icon={GetIcon(location.size, location.iconColor)}
-              >
-                <Popup>{location.name}</Popup>
-              </Marker>
-            ))}
-        </LayersControl.Overlay>  
-        </LayersControl>
       </MapContainer>
       <div>
         {
           filterItems.map((filter) => {
             return (
               <div key={filter}>
-                <input type="checkbox" onChange={updateFilter} name={filter} defaultChecked/>
+                <input type="checkbox" onChange={updateFilter} name={filter} defaultChecked />
                 <label>{filter}</label>
               </div>
             )
