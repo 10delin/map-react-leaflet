@@ -35,6 +35,14 @@ const data = [
   },
   {
     key: 3,
+    name: "Colegio Sevilla",
+    type: "Colegios",
+    position: [37.45670677992029, -5.96596917337107],
+    size: 25,
+    iconColor: "red",
+  },
+  {
+    key: 4,
     name: "Colegio Granada",
     type: "Enitdades",
     position: [37.18640204329338, -3.650600468886968],
@@ -59,21 +67,20 @@ const MyMap = () => {
   const [locations, setLocations] = useState(data)
   const [activeLocations, setActiveLocations] = useState(data)
   const [filterItems, setFilterItems] = useState(() => getUniqueFilterItems(locations))
-  const [activefilterItems, setActiveFilterItems] = useState(() => getUniqueFilterItems(locations))
 
-  console.log('locations', locations)
   const updateFilter = (e) => {
     console.log('e', e.currentTarget.name)
     console.log('checked', e.currentTarget.checked)
-    const locationsCopy = [...locations]
-    console.log('loc copy', locationsCopy)
-
-
-     const newActiveFilters = activefilterItems.filter(filter => filter.type !== e.currentTarget.name)
-     const newLocations = locationsCopy.filter(location => location.type !== e.currentTarget.name)
-     console.log('newlocations', newLocations)
-     setActiveLocations(newLocations)
-     setActiveFilterItems(newActiveFilters)
+    
+    if (!e.currentTarget.checked) {
+      const locationsCopy = [...activeLocations]
+      const newLocations = locationsCopy.filter(location => location.type !== e.currentTarget.name)
+      setActiveLocations(newLocations)
+    } else {
+      const locationsCopy = [...locations]
+      const newLocations = locationsCopy.filter(location => location.type === e.currentTarget.name)
+      setActiveLocations([...activeLocations, ...newLocations])
+    }
  
   }
 
