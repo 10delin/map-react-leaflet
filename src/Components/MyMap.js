@@ -50,7 +50,7 @@ function MyMap() {
   return (
     <MapContainer
       className="map"
-      center={[37.22468458759511, -4.701167986858213]}
+      center={[37.22468458759511, -4.701167986858214]}
       zoom={8}
       style={{ height: 800, width: "100%" }}
     >
