@@ -59,6 +59,7 @@ const MyMap = () => {
   const [locations, setLocations] = useState(data)
   const [activeLocations, setActiveLocations] = useState(data)
   const [filterItems, setFilterItems] = useState(() => getUniqueFilterItems(locations))
+  const [activefilterItems, setActiveFilterItems] = useState(() => getUniqueFilterItems(locations))
 
   console.log('locations', locations)
   const updateFilter = (e) => {
@@ -67,15 +68,12 @@ const MyMap = () => {
     const locationsCopy = [...locations]
     console.log('loc copy', locationsCopy)
 
-    if (e.currentTarget.checked) {
 
-    } else {
-
-    }
-
+     const newActiveFilters = activefilterItems.filter(filter => filter.type !== e.currentTarget.name)
      const newLocations = locationsCopy.filter(location => location.type !== e.currentTarget.name)
      console.log('newlocations', newLocations)
      setActiveLocations(newLocations)
+     setActiveFilterItems(newActiveFilters)
  
   }
 
