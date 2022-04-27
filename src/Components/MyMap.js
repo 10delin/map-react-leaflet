@@ -52,57 +52,69 @@ const data = [
 ];
 
 const getUniqueFilterItems = (locations) => {
-  const uniqueFilters = []
+  const uniqueFilters = [];
 
-  locations.map(location => {
+  locations.map((location) => {
     if (!uniqueFilters.includes(location.type)) {
-      uniqueFilters.push(location.type)
+      uniqueFilters.push(location.type);
     }
-  })
+  });
 
-  return uniqueFilters
-}
+  return uniqueFilters;
+};
 
 const MyMap = () => {
-  const [locations, setLocations] = useState(data)
-  const [activeLocations, setActiveLocations] = useState(data)
-  const [filterItems, setFilterItems] = useState(() => getUniqueFilterItems(locations))
+  const [locations, setLocations] = useState(data);
+  const [activeLocations, setActiveLocations] = useState(data);
+  const [filterItems, setFilterItems] = useState(() =>
+    getUniqueFilterItems(locations)
+  );
 
   const updateFilter = (e) => {
-    console.log('e', e.currentTarget.name)
-    console.log('checked', e.currentTarget.checked)
+    console.log("e", e.currentTarget.name);
+    console.log("checked", e.currentTarget.checked);
 
     if (!e.currentTarget.checked) {
-      const locationsCopy = [...activeLocations]
-      const newLocations = locationsCopy.filter(location => location.type !== e.currentTarget.name)
-      setActiveLocations(newLocations)
+      const locationsCopy = [...activeLocations];
+      const newLocations = locationsCopy.filter(
+        (location) => location.type !== e.currentTarget.name
+      );
+      setActiveLocations(newLocations);
     } else {
-      const locationsCopy = [...locations]
-      const newLocations = locationsCopy.filter(location => location.type === e.currentTarget.name)
-      setActiveLocations([...activeLocations, ...newLocations])
+      const locationsCopy = [...locations];
+      const newLocations = locationsCopy.filter(
+        (location) => location.type === e.currentTarget.name
+      );
+      setActiveLocations([...activeLocations, ...newLocations]);
     }
-
-  }
+  };
 
   useEffect(() => {
-    setFilterItems(getUniqueFilterItems(locations))
-  }, [locations])
+    setFilterItems(getUniqueFilterItems(locations));
+  }, [locations]);
+
+  //variables to limit the map
+  const corner1 = L.latLng(35.290051301069006, -7.629485689021285);
+  const corner2 = L.latLng(39.027321651363565, -0.8509217840822761);
+  const bounds = L.latLngBounds(corner1, corner2);
 
   return (
     <>
       <MapContainer
         className="map"
         center={[37.22468458759511, -4.701167986858217]}
-        zoom={8}
-        minZoom={8}
+        zoom={8.3}
+        minZoom={7}
         doubleClickZoom={false}
+        maxBoundsViscosity={3.0}
+        maxBounds={bounds}
         style={{ height: 800, width: "100%" }}
       >
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
         />
-        
+
         {activeLocations.map((location) => (
           <Marker
             key={location.key}
@@ -112,22 +124,24 @@ const MyMap = () => {
             <Popup>{location.name}</Popup>
           </Marker>
         ))}
-
       </MapContainer>
       <div>
-        {
-          filterItems.map((filter) => {
-            return (
-              <div key={filter}>
-                <input type="checkbox" onChange={updateFilter} name={filter} defaultChecked />
-                <label>{filter}</label>
-              </div>
-            )
-          })
-        }
+        {filterItems.map((filter) => {
+          return (
+            <div key={filter}>
+              <input
+                type="checkbox"
+                onChange={updateFilter}
+                name={filter}
+                defaultChecked
+              />
+              <label>{filter}</label>
+            </div>
+          );
+        })}
       </div>
     </>
   );
-}
+};
 
 export default MyMap;
