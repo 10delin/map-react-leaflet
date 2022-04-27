@@ -36,7 +36,7 @@ const data = [
   {
     key: 3,
     name: "Colegio Granada",
-    type: "Colegios",
+    type: "Enitdades",
     position: [37.18640204329338, -3.650600468886968],
     size: 25,
     iconColor: "orange",
@@ -45,6 +45,7 @@ const data = [
 
 const getUniqueFilterItems = (locations) => {
   const uniqueFilters = []
+
   locations.map(location => {
     if(!uniqueFilters.includes(location.type)) {
       uniqueFilters.push(location.type)
@@ -55,12 +56,32 @@ const getUniqueFilterItems = (locations) => {
 }
 
 const MyMap = () => {
-  const [locations, setLocations] = useState([])
-  const [filterItems, setFilterItems] = useState(getUniqueFilterItems[locations])
+  const [locations, setLocations] = useState(data)
+  const [activeLocations, setActiveLocations] = useState(data)
+  const [filterItems, setFilterItems] = useState(() => getUniqueFilterItems(locations))
+
+  console.log('locations', locations)
+  const updateFilter = (e) => {
+    console.log('e', e.currentTarget.name)
+    console.log('checked', e.currentTarget.checked)
+    const locationsCopy = [...locations]
+    console.log('loc copy', locationsCopy)
+
+    if (e.currentTarget.checked) {
+
+    } else {
+
+    }
+
+     const newLocations = locationsCopy.filter(location => location.type !== e.currentTarget.name)
+     console.log('newlocations', newLocations)
+     setActiveLocations(newLocations)
+ 
+  }
 
   useEffect(() => {
-    setLocations(data)
-  },[])
+    setFilterItems(getUniqueFilterItems(locations))
+  },[locations])
 
   return (
     <>
@@ -77,7 +98,7 @@ const MyMap = () => {
 
         <LayersControl collapsed={false} position="bottomright">
           <LayersControl.Overlay checked name="Colegios">
-            {locations.map((location) => (
+            {activeLocations.map((location) => (
               <Marker
                 key={location.key}
                 position={location.position}
@@ -91,11 +112,11 @@ const MyMap = () => {
       </MapContainer>
       <div>
         {
-          locations.map((location, index) => {
+          filterItems.map((filter) => {
             return (
-              <div key={index}>
-                <input type="checkbox"/>
-                <label>{location.type}</label>
+              <div key={filter}>
+                <input type="checkbox" onChange={updateFilter} name={filter} defaultChecked/>
+                <label>{filter}</label>
               </div>
             )
           })
