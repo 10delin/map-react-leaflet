@@ -8,9 +8,9 @@ import {
   TileLayer,
 } from "react-leaflet";
 
-function GetIcon(iconSize, iconColor) {
+function GetIcon(iconSize, iconType) {
   return L.icon({
-    iconUrl: require("../Static/Markers/marker-" + iconColor + ".png"),
+    iconUrl: require(`../Static/Markers/marker-${iconType}.png`),
     iconSize: [iconSize],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -25,19 +25,17 @@ const bounds = L.latLngBounds(corner1, corner2);
 const data = [
   {
     key: 1,
-    name: "Digital Cuisine",
-    type: "Trabajo",
+    name: "Instituto Cuisine",
+    type: "Asociaciones",
     position: [36.68648698680206, -6.1408180751951],
     size: 25,
-    iconColor: "blue",
   },
   {
     key: 2,
-    name: "Colegio Sevilla",
-    type: "Colegios",
+    name: "Ayuntamiento Sevilla",
+    type: "Ayuntamientos",
     position: [37.36670677992029, -5.96596917337107],
     size: 25,
-    iconColor: "red",
   },
   {
     key: 3,
@@ -45,15 +43,13 @@ const data = [
     type: "Colegios",
     position: [37.45670677992029, -5.96596917337107],
     size: 25,
-    iconColor: "red",
   },
   {
     key: 4,
     name: "Colegio Granada",
-    type: "Enitdades",
+    type: "Colegios",
     position: [37.18640204329338, -3.650600468886968],
     size: 25,
-    iconColor: "orange",
   },
 ];
 
@@ -122,7 +118,7 @@ const MyMap = () => {
           <Marker
             key={location.key}
             position={location.position}
-            icon={GetIcon(location.size, location.iconColor)}
+            icon={GetIcon(location.size, location.type.toLowerCase())}
           >
             <Popup>{location.name}</Popup>
           </Marker>
@@ -138,8 +134,8 @@ const MyMap = () => {
                 name={filter}
                 defaultChecked
               />
-              <label 
-              className={filter.toLowerCase()}>{filter}</label>
+              <label>{filter} </label>
+            <div className={filter.toLowerCase()}></div>
             </div>
           );
         })}

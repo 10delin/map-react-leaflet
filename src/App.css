@@ -1,3 +1,20 @@
-.trabajo {
-  color: red;
+.colegios {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: orange;
+}
+
+.asociaciones{
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: green;
+}
+
+.ayuntamientos{
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: black;
 }
