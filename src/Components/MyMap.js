@@ -96,57 +96,61 @@ const MyMap = () => {
 
   return (
     <>
-      <MapContainer
-        className="map"
-        center={[37.22468458759511, -4.701167986858217]}
-        zoom={8.3}
-        minZoom={7}
-        doubleClickZoom={false}
-        maxBoundsViscosity={3.0}
-        maxBounds={bounds}
-        style={{ height: 800, width: "100%" }}
-      >
-        <TileLayer
-          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
-        />
+      <div style={{align:"center",padding:"3% 5% 5%"}}>
+        <MapContainer
+          className="map"
+          center={[37.22468458759511, -4.701167986858217]}
+          zoom={8.3}
+          minZoom={7}
+          doubleClickZoom={false}
+          maxBoundsViscosity={3.0}
+          maxBounds={bounds}
+          style={{ height: 750, width: "100%",borderRadius: "10px",border:"2px solid grey" }}
+        >
+          
+          <TileLayer
+            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
+          />
 
-        {activeLocations.map((location) => (
-          <Marker
-            key={location.key}
-            position={location.position}
-            icon={GetIcon(location.size, location.type.toLowerCase())}
-          >
-            <Popup>
-              <div style={popupContent}>
-                <a href={location.link}>
-                  <img
-                    src={location.img}
-                    width="150"
-                    height="150"
-                    alt="no img"
-                  />
-                </a>
-                <div className="m-2" style={popupHead}>
-                  {location.name}
+          {activeLocations.map((location) => (
+            <Marker
+              key={location.key}
+              position={location.position}
+              icon={GetIcon(location.size, location.type.toLowerCase())}
+            >
+              <Popup>
+                <div style={popupContent}>
+                  <a href={location.link}>
+                    <img
+                      src={location.img}
+                      width="150"
+                      height="150"
+                      alt="no img"
+                    />
+                  </a>
+                  <div className="m-2" style={popupHead}>
+                    {location.name}
+                  </div>
+                  <span style={popupText}>
+                    <span style={{ color: "green" }}>EXPERIENCIAS: </span>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </span>
+                  <div className="m-2" style={urlPopup}>
+                    <span>
+                      <b>Web: </b>
+                    </span>
+                    <a href={location.link}>{location.link}</a>
+                  </div>
                 </div>
-                <span style={popupText}>
-                  <span style={{color:"green"}}>EXPERIENCIAS: </span>
-                  Lorem ipsum dolor sit  amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </span>
-                <div className="m-2" style={urlPopup}>
-                  <span><b>Web: </b></span>
-                  <a href={location.link}>{location.link}</a>
-                </div>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-      <div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      <div style={{display: "inline-block"}}>
         {filterItems.map((filter) => {
           return (
             <div key={filter}>
@@ -161,6 +165,7 @@ const MyMap = () => {
             </div>
           );
         })}
+      </div>
       </div>
     </>
   );
