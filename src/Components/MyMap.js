@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import L from "leaflet";
 import {
-  LayersControl,
   MapContainer,
   Marker,
   Popup,
   TileLayer,
+  useMap,
+  useMapEvents
 } from "react-leaflet";
+import { latLng } from "leaflet";
 
 function GetIcon(iconSize, iconColor) {
   return L.icon({
@@ -69,6 +71,19 @@ const getUniqueFilterItems = (locations) => {
   return uniqueFilters;
 };
 
+function MyComponent() {
+  console.log(1)
+  const map = useMap()
+  useMapEvents({
+    click: (e) => {
+      const clicked = map.mouseEventToLatLng(e.originalEvent)
+      console.log(clicked)
+
+    }
+  })
+  return null
+}
+
 const MyMap = () => {
   const [locations, setLocations] = useState([]);
   const [activeLocations, setActiveLocations] = useState([]);
@@ -93,14 +108,14 @@ const MyMap = () => {
   };
 
   useEffect(() => {
-    setLocations(data)
-    setActiveLocations(data)
-  }, [])
+    setLocations(data);
+    setActiveLocations(data);
+  }, []);
 
   useEffect(() => {
     setFilterItems(getUniqueFilterItems(locations));
   }, [locations]);
-
+ 
   return (
     <>
       <MapContainer
@@ -117,7 +132,7 @@ const MyMap = () => {
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
         />
-
+        <MyComponent/>
         {activeLocations.map((location) => (
           <Marker
             key={location.key}
@@ -127,6 +142,7 @@ const MyMap = () => {
             <Popup>{location.name}</Popup>
           </Marker>
         ))}
+
       </MapContainer>
       <div>
         {filterItems.map((filter) => {
@@ -138,8 +154,7 @@ const MyMap = () => {
                 name={filter}
                 defaultChecked
               />
-              <label 
-              className={filter.toLowerCase()}>{filter}</label>
+              <label className={filter.toLowerCase()}>{filter}</label>
             </div>
           );
         })}
