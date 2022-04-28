@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import L from "leaflet";
-import {
-  LayersControl,
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-} from "react-leaflet";
+import { popupContent, popupHead, popupText, urlPopup } from "./popupStyles";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 function GetIcon(iconSize, iconType) {
   return L.icon({
-    iconUrl: require(`../Static/Markers/marker-${iconType}.png`),
+    iconUrl: require(`../Assets/Markers/marker-${iconType}.png`),
     iconSize: [iconSize],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -29,6 +24,8 @@ const data = [
     type: "Asociaciones",
     position: [36.68648698680206, -6.1408180751951],
     size: 25,
+    link: "https://www.cuisine.digital/es/",
+    img: "https://media-exp1.licdn.com/dms/image/C4E0BAQHheSY8MqEQ1g/company-logo_200_200/0/1610019399238?e=2147483647&v=beta&t=8PUR2dVMa41fu16eVp3aNPwdSeuFKD9iJQ6F1e0U4JA",
   },
   {
     key: 2,
@@ -89,9 +86,9 @@ const MyMap = () => {
   };
 
   useEffect(() => {
-    setLocations(data)
-    setActiveLocations(data)
-  }, [])
+    setLocations(data);
+    setActiveLocations(data);
+  }, []);
 
   useEffect(() => {
     setFilterItems(getUniqueFilterItems(locations));
@@ -120,7 +117,32 @@ const MyMap = () => {
             position={location.position}
             icon={GetIcon(location.size, location.type.toLowerCase())}
           >
-            <Popup>{location.name}</Popup>
+            <Popup>
+              <div style={popupContent}>
+                <a href={location.link}>
+                  <img
+                    src={location.img}
+                    width="150"
+                    height="150"
+                    alt="no img"
+                  />
+                </a>
+                <div className="m-2" style={popupHead}>
+                  {location.name}
+                </div>
+                <span style={popupText}>
+                  <span style={{color:"green"}}>EXPERIENCIAS: </span>
+                  Lorem ipsum dolor sit  amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </span>
+                <div className="m-2" style={urlPopup}>
+                  <span><b>Web: </b></span>
+                  <a href={location.link}>{location.link}</a>
+                </div>
+              </div>
+            </Popup>
           </Marker>
         ))}
       </MapContainer>
@@ -135,7 +157,7 @@ const MyMap = () => {
                 defaultChecked
               />
               <label>{filter} </label>
-            <div className={filter.toLowerCase()}></div>
+              <div className={filter.toLowerCase()}></div>
             </div>
           );
         })}
