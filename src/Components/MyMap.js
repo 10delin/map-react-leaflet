@@ -96,7 +96,7 @@ const MyMap = () => {
 
   return (
     <>
-      <div style={{align:"center",padding:"3% 5% 5%"}}>
+      <div style={{ align: "center", padding: "3% 5% 5%" }}>
         <MapContainer
           className="map"
           center={[37.22468458759511, -4.701167986858217]}
@@ -105,9 +105,13 @@ const MyMap = () => {
           doubleClickZoom={false}
           maxBoundsViscosity={3.0}
           maxBounds={bounds}
-          style={{ height: 750, width: "100%",borderRadius: "10px",border:"2px solid grey" }}
+          style={{
+            height: 750,
+            width: "100%",
+            borderRadius: "10px",
+            border: "2px solid grey",
+          }}
         >
-          
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
@@ -150,22 +154,34 @@ const MyMap = () => {
             </Marker>
           ))}
         </MapContainer>
-      <div style={{display: "inline-block"}}>
-        {filterItems.map((filter) => {
-          return (
-            <div key={filter}>
-              <input
-                type="checkbox"
-                onChange={updateFilter}
-                name={filter}
-                defaultChecked
-              />
-              <label>{filter} </label>
-              <div className={filter.toLowerCase()}></div>
+        <div style={{ display: "inline-block" }}>
+          <div className="body">
+            <div className="main">
+              <input className="burger" type="checkbox" />
+              <span></span>
+              <span></span>
+              <span></span>
+              <div className="menu">
+                {filterItems.map((filter) => {
+                  return (
+                    <li key={filter}>
+                      <input
+                      id={filter}
+                        type="checkbox"
+                        onChange={updateFilter}
+                        name={filter}
+                        defaultChecked
+                      />
+                      <label for={filter}>{filter} </label>
+                      <p>&nbsp;</p>
+                      <div  className={filter.toLowerCase()}></div>
+                    </li>
+                  );
+                })}
+              </div>
             </div>
-          );
-        })}
-      </div>
+          </div>
+        </div>
       </div>
     </>
   );
