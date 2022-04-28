@@ -16,6 +16,12 @@ function GetIcon(iconSize, iconColor) {
     popupAnchor: [1, -34],
   });
 }
+
+//variables to limit the map
+const corner1 = L.latLng(35.290051301069006, -7.629485689021285);
+const corner2 = L.latLng(39.027321651363565, -0.8509217840822761);
+const bounds = L.latLngBounds(corner1, corner2);
+
 const data = [
   {
     key: 1,
@@ -64,16 +70,13 @@ const getUniqueFilterItems = (locations) => {
 };
 
 const MyMap = () => {
-  const [locations, setLocations] = useState(data);
-  const [activeLocations, setActiveLocations] = useState(data);
+  const [locations, setLocations] = useState([]);
+  const [activeLocations, setActiveLocations] = useState([]);
   const [filterItems, setFilterItems] = useState(() =>
     getUniqueFilterItems(locations)
   );
 
   const updateFilter = (e) => {
-    console.log("e", e.currentTarget.name);
-    console.log("checked", e.currentTarget.checked);
-
     if (!e.currentTarget.checked) {
       const locationsCopy = [...activeLocations];
       const newLocations = locationsCopy.filter(
@@ -90,13 +93,13 @@ const MyMap = () => {
   };
 
   useEffect(() => {
+    setLocations(data)
+    setActiveLocations(data)
+  }, [])
+
+  useEffect(() => {
     setFilterItems(getUniqueFilterItems(locations));
   }, [locations]);
-
-  //variables to limit the map
-  const corner1 = L.latLng(35.290051301069006, -7.629485689021285);
-  const corner2 = L.latLng(39.027321651363565, -0.8509217840822761);
-  const bounds = L.latLngBounds(corner1, corner2);
 
   return (
     <>
@@ -135,7 +138,8 @@ const MyMap = () => {
                 name={filter}
                 defaultChecked
               />
-              <label>{filter}</label>
+              <label 
+              className={filter.toLowerCase()}>{filter}</label>
             </div>
           );
         })}
