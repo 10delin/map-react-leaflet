@@ -3,9 +3,9 @@ import L from "leaflet";
 import { popupContent, popupHead, popupText, urlPopup } from "./popupStyles";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-function GetIcon(iconSize, iconColor) {
+function GetIcon(iconSize, iconType) {
   return L.icon({
-    iconUrl: require("../Assets/Markers/marker-" + iconColor + ".png"),
+    iconUrl: require(`../Assets/Markers/marker-${iconType}.png`),
     iconSize: [iconSize],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -20,21 +20,19 @@ const bounds = L.latLngBounds(corner1, corner2);
 const data = [
   {
     key: 1,
-    name: "Digital Cuisine",
-    type: "Trabajo",
+    name: "Instituto Cuisine",
+    type: "Asociaciones",
     position: [36.68648698680206, -6.1408180751951],
     size: 25,
-    iconColor: "blue",
     link: "https://www.cuisine.digital/es/",
     img: "https://media-exp1.licdn.com/dms/image/C4E0BAQHheSY8MqEQ1g/company-logo_200_200/0/1610019399238?e=2147483647&v=beta&t=8PUR2dVMa41fu16eVp3aNPwdSeuFKD9iJQ6F1e0U4JA",
   },
   {
     key: 2,
-    name: "Colegio Sevilla",
-    type: "Colegios",
+    name: "Ayuntamiento Sevilla",
+    type: "Ayuntamientos",
     position: [37.36670677992029, -5.96596917337107],
     size: 25,
-    iconColor: "red",
   },
   {
     key: 3,
@@ -42,15 +40,13 @@ const data = [
     type: "Colegios",
     position: [37.45670677992029, -5.96596917337107],
     size: 25,
-    iconColor: "red",
   },
   {
     key: 4,
     name: "Colegio Granada",
-    type: "Enitdades",
+    type: "Colegios",
     position: [37.18640204329338, -3.650600468886968],
     size: 25,
-    iconColor: "orange",
   },
 ];
 
@@ -119,7 +115,7 @@ const MyMap = () => {
           <Marker
             key={location.key}
             position={location.position}
-            icon={GetIcon(location.size, location.iconColor)}
+            icon={GetIcon(location.size, location.type.toLowerCase())}
           >
             <Popup>
               <div style={popupContent}>
@@ -160,7 +156,8 @@ const MyMap = () => {
                 name={filter}
                 defaultChecked
               />
-              <label className={filter.toLowerCase()}>{filter}</label>
+              <label>{filter} </label>
+              <div className={filter.toLowerCase()}></div>
             </div>
           );
         })}
