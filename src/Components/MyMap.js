@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo,  useRef} from "react";
 import L from "leaflet";
 import {
   MapContainer,
   Marker,
   Popup,
   TileLayer,
-  useMap,
-  useMapEvents
+ // useMap,
+ // useMapEvents
 } from "react-leaflet";
-import { latLng } from "leaflet";
+//import { latLng } from "leaflet";
 
 function GetIcon(iconSize, iconColor) {
   return L.icon({
@@ -71,18 +71,16 @@ const getUniqueFilterItems = (locations) => {
   return uniqueFilters;
 };
 
-function MyComponent() {
-  console.log(1)
-  const map = useMap()
-  useMapEvents({
-    click: (e) => {
-      const clicked = map.mouseEventToLatLng(e.originalEvent)
-      console.log(clicked)
-
-    }
-  })
-  return null
-}
+// function MyComponent() {
+//   const map = useMap()
+//   useMapEvents({
+//     // click: (e) => {
+//     //   const clicked = map.mouseEventToLatLng(e.originalEvent)
+//     //   L.marker([clicked.lat,clicked.lng]).addTo(map)
+//     // }
+//   })
+//   return null
+// }
 
 const MyMap = () => {
   const [locations, setLocations] = useState([]);
@@ -115,7 +113,66 @@ const MyMap = () => {
   useEffect(() => {
     setFilterItems(getUniqueFilterItems(locations));
   }, [locations]);
- 
+
+  const center = [37.22468458759511, -4.701167986858217]
+
+  function GetIcon(iconSize, iconColor) {
+
+    return L.icon({
+  
+      iconUrl: require("../Static/Markers/marker-" + iconColor + ".png"),
+  
+      iconSize: [iconSize],
+  
+      iconAnchor: [12, 41],
+  
+      popupAnchor: [1, -34],
+  
+    });
+  
+  }
+
+
+  function DraggableMarker() {
+    const [draggable, setDraggable] = useState(false)
+    const [position, setPosition] = useState(center)
+    const markerRef = useRef(null)
+    console.log(position)
+    const eventHandlers = useMemo(
+      () => ({
+        dragend() {
+          const marker = markerRef.current
+          if (marker != null) {
+            setPosition(marker.getLatLng())
+          }
+        },
+      }),
+      [],
+    )
+    const toggleDraggable = useCallback(() => {
+      setDraggable((d) => !d)
+    }, [])
+  
+    return (
+      <Marker
+        draggable={toggleDraggable}
+        eventHandlers={eventHandlers}
+        position={position}
+        icon = {GetIcon(25,"red")}       
+        ref={markerRef}>
+        {/* <Popup minWidth={90}>
+          <span onClick={toggleDraggable}>
+          </span>
+        </Popup> */}
+      </Marker>
+    )
+  }
+
+
+  
+
+
+
   return (
     <>
       <MapContainer
@@ -132,16 +189,9 @@ const MyMap = () => {
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
         />
-        <MyComponent/>
-        {activeLocations.map((location) => (
-          <Marker
-            key={location.key}
-            position={location.position}
-            icon={GetIcon(location.size, location.iconColor)}
-          >
-            <Popup>{location.name}</Popup>
-          </Marker>
-        ))}
+        {/* <MyComponent /> */}
+        <DraggableMarker />
+        ))
 
       </MapContainer>
       <div>
