@@ -96,7 +96,6 @@ const MyMap = () => {
 
   return (
     <>
-      <div style={{ align: "center", padding: "3% 5% 5%" }}>
         <MapContainer
           className="map"
           center={[37.22468458759511, -4.701167986858217]}
@@ -108,8 +107,6 @@ const MyMap = () => {
           style={{
             height: 750,
             width: "100%",
-            borderRadius: "10px",
-            border: "2px solid grey",
           }}
         >
           <TileLayer
@@ -154,7 +151,7 @@ const MyMap = () => {
             </Marker>
           ))}
         </MapContainer>
-        <div style={{display: "inline-block"}}>
+        <div >
         {filterItems.map((filter) => {
           return (
             <div key={filter}>
@@ -169,7 +166,6 @@ const MyMap = () => {
             </div>
           );
         })}
-      </div>
       </div>
     </>
   );
