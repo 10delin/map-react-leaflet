@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef  } from "react";
 import L from "leaflet";
 import { popupContent, popupHead, popupText, urlPopup } from "./popupStyles";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.css'
 
 function GetIcon(iconSize, iconType) {
   return L.icon({
@@ -50,6 +53,34 @@ const data = [
   },
 ];
 
+function MyVerticallyCenteredModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Modal heading
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h4>Centered Modal</h4>
+        <p>
+          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
+          consectetur ac, vestibulum at eros.
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
 const getUniqueFilterItems = (locations) => {
   const uniqueFilters = [];
 
@@ -68,6 +99,7 @@ const MyMap = () => {
   const [filterItems, setFilterItems] = useState(() =>
     getUniqueFilterItems(locations)
   );
+  const [modalShow, setModalShow] = React.useState(false);
 
   const updateFilter = (e) => {
     if (!e.currentTarget.checked) {
@@ -94,10 +126,26 @@ const MyMap = () => {
     setFilterItems(getUniqueFilterItems(locations));
   }, [locations]);
 
+const mapRef = useRef();
+function handleSetView(){
+  const {current = {}} = mapRef;
+  const {leafletElement: map} = current;
+      map.flyTo([37.36670677992029, -5.96596917337107], 14, {
+        duration: 2
+      })
+}
+
   return (
     <>
-      <div style={{ align: "center", padding: "3% 5% 5%" }}>
+    <div style={{ align: "center", padding: "3% 5% 5%" }}>
+    <Button variant="primary" onClick={() => handleSetView()}>
+        Launch vertically centered modal
+      </Button>
+      <Button variant="primary" onClick={() => setModalShow(true)}>
+        Launch vertically centered modal
+      </Button>
         <MapContainer
+          ref={mapRef}
           className="map"
           center={[37.22468458759511, -4.701167986858217]}
           zoom={8.3}
@@ -166,7 +214,7 @@ const MyMap = () => {
                   return (
                     <li key={filter}>
                       <input
-                      id={filter}
+                        id={filter}
                         type="checkbox"
                         onChange={updateFilter}
                         name={filter}
@@ -174,7 +222,7 @@ const MyMap = () => {
                       />
                       <label for={filter}>{filter} </label>
                       <p>&nbsp;</p>
-                      <div  className={filter.toLowerCase()}></div>
+                      <div className={filter.toLowerCase()}></div>
                     </li>
                   );
                 })}
@@ -182,6 +230,10 @@ const MyMap = () => {
             </div>
           </div>
         </div>
+        <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
       </div>
     </>
   );
