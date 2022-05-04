@@ -154,34 +154,22 @@ const MyMap = () => {
             </Marker>
           ))}
         </MapContainer>
-        <div style={{ display: "inline-block" }}>
-          <div className="body">
-            <div className="main">
-              <input className="burger" type="checkbox" />
-              <span></span>
-              <span></span>
-              <span></span>
-              <div className="menu">
-                {filterItems.map((filter) => {
-                  return (
-                    <li key={filter}>
-                      <input
-                      id={filter}
-                        type="checkbox"
-                        onChange={updateFilter}
-                        name={filter}
-                        defaultChecked
-                      />
-                      <label for={filter}>{filter} </label>
-                      <p>&nbsp;</p>
-                      <div  className={filter.toLowerCase()}></div>
-                    </li>
-                  );
-                })}
-              </div>
+        <div style={{display: "inline-block"}}>
+        {filterItems.map((filter) => {
+          return (
+            <div key={filter}>
+              <input
+                type="checkbox"
+                onChange={updateFilter}
+                name={filter}
+                defaultChecked
+              />
+              <label>{filter} </label>
+              <div className={filter.toLowerCase()}></div>
             </div>
-          </div>
-        </div>
+          );
+        })}
+      </div>
       </div>
     </>
   );
